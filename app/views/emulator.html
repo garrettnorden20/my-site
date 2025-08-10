@@ -1,14 +1,63 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="emulator-container"><div id="game"></div></div>
+<div class="emulator-container">
+  <select id="rom-select">
+    <option value="game1.gba">Game1</option>
+    <option value="game2.gba">Game2</option>
+    <option value="game3.gba">Game3</option>
+  </select>
+  <input id="rom-upload" type="file" accept=".gba" />
+  <div id="game"></div>
+</div>
 <script>
-  EJS_player = "#game";
-  EJS_core = "gba";
-  EJS_gameName = "gameitup";
-  EJS_color = "#0064ff";
-  EJS_startOnLoaded = true;
-  EJS_pathtodata = "/static/emulatorjs/data/";
-  EJS_gameUrl = "/static/emulatorjs/roms/therom.gba";
+  const romSelect = document.getElementById('rom-select');
+  const romUpload = document.getElementById('rom-upload');
+  const uploadedFiles = {};
+
+  const loadGame = () => {
+    EJS_player = "#game";
+    EJS_core = "gba";
+    EJS_color = "#0064ff";
+    EJS_startOnLoaded = true;
+    EJS_pathtodata = "/static/emulatorjs/data/";
+
+    const selected = romSelect.value;
+    const file = uploadedFiles[selected];
+    if (file) {
+      EJS_gameFile = file;
+      EJS_gameUrl = null;
+      EJS_gameName = file.name;
+    } else {
+      EJS_gameFile = null;
+      EJS_gameUrl = `/static/emulatorjs/roms/${selected}`;
+      EJS_gameName = romSelect.options[romSelect.selectedIndex].text;
+    }
+
+    const script = document.createElement('script');
+    script.src = "/static/emulatorjs/data/loader.js";
+    document.body.appendChild(script);
+  };
+
+  romSelect.addEventListener('change', () => {
+    document.getElementById('game').innerHTML = '';
+    loadGame();
+  });
+
+  romUpload.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const value = `upload-${Object.keys(uploadedFiles).length}`;
+      uploadedFiles[value] = file;
+      const option = document.createElement('option');
+      option.value = value;
+      option.text = file.name;
+      romSelect.appendChild(option);
+      romSelect.value = value;
+      document.getElementById('game').innerHTML = '';
+      loadGame();
+    }
+  });
+
+  loadGame();
 </script>
-<script src="/static/emulatorjs/data/loader.js"></script>
 {% endblock %}

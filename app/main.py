@@ -2,6 +2,7 @@ from fastapi import FastAPI, Request, Depends, Form
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
+from fastapi.staticfiles import StaticFiles
 from sqlalchemy import text  # <-- add
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
@@ -12,6 +13,7 @@ from . import models
 from .tasks.sitemap import rebuild_sitemap
 
 app = FastAPI(title=settings.app_name)
+app.mount("/static", StaticFiles(directory="app/static"), name="static")
 app.include_router(api_router, prefix="/api")
 templates = Jinja2Templates(directory="app/views")
 

@@ -7,3 +7,5 @@ __pycache__/
 .pytest_cache/
 .DS_Store
 ops/scripts/*.log
+.vscode/settings.json
+app/static/emulatorjs/roms/

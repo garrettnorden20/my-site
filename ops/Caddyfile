@@ -1,0 +1,9 @@
+:80 {
+    encode gzip
+    handle_path /static/* {
+        root * /app/app/static
+        file_server
+    }
+    reverse_proxy /api/* app:8000
+    reverse_proxy /* app:8000
+}

@@ -1,0 +1,10 @@
+[Unit]
+Description=Start website service on boot and check hourly
+
+[Timer]
+OnBootSec=2min
+OnUnitActiveSec=1h
+Unit=website.service
+
+[Install]
+WantedBy=timers.target

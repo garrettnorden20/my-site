@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Notes</h1>
+<div id="notes-list" hx-get="/notes" hx-trigger="load"></div>
+<form hx-post="/notes" hx-target="#notes-list" hx-swap="afterbegin">
+    <input name="content" placeholder="note" />
+    <button type="submit">Add</button>
+</form>
+{% endblock %}

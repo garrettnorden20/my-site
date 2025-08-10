@@ -1,0 +1,27 @@
+version: '3.9'
+services:
+  app:
+    build:
+      context: ..
+      dockerfile: ops/Dockerfile.app
+    environment:
+      - DATABASE_URL=sqlite:///data/data.db
+    volumes:
+      - db_data:/data
+    restart: unless-stopped
+  caddy:
+    build:
+      context: ..
+      dockerfile: ops/Dockerfile.caddy
+    ports:
+      - "80:80"
+    volumes:
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - app
+    restart: unless-stopped
+volumes:
+  db_data:
+  caddy_data:
+  caddy_config:

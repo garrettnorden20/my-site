@@ -34,12 +34,20 @@ async def shutdown() -> None:
 async def index(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
+@app.get("/emulator", response_class=HTMLResponse)
+async def emulator(request: Request):
+    return templates.TemplateResponse("emulator.html", {"request": request})
+
 @app.get("/notes", response_class=HTMLResponse)
+async def notes_page(request: Request):
+    return templates.TemplateResponse("notes.html", {"request": request})
+
+@app.get("/notes/items", response_class=HTMLResponse)
 async def notes_list(request: Request, db: Session = Depends(get_session)):
     notes = db.query(models.Note).order_by(models.Note.id.desc()).all()
     return templates.TemplateResponse("partials/notes_items.html", {"request": request, "notes": notes})
 
-@app.post("/notes", response_class=HTMLResponse)
+@app.post("/notes/items", response_class=HTMLResponse)
 async def notes_create(request: Request, content: str = Form(...), db: Session = Depends(get_session)):
     note = models.Note(content=content)
     db.add(note)

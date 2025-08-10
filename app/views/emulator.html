@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="emulator-container"><div id="game"></div></div>
+<script>
+  EJS_player = "#game";
+  EJS_core = "gba";
+  EJS_gameName = "gameitup";
+  EJS_color = "#0064ff";
+  EJS_startOnLoaded = true;
+  EJS_pathtodata = "/static/emulatorjs/data/";
+  EJS_gameUrl = "/static/emulatorjs/roms/therom.gba";
+</script>
+<script src="/static/emulatorjs/data/loader.js"></script>
+{% endblock %}
